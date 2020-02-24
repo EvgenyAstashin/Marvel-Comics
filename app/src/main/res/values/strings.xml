@@ -5,4 +5,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="load_comics">Load comics</string>
     <string name="select_the_time_period_for_loading_comics">Select the time period for loading comics</string>
+    <string name="nothing_to_show">Nothing to show</string>
 </resources>

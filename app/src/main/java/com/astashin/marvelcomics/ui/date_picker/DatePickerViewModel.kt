@@ -3,12 +3,24 @@ package com.astashin.marvelcomics.ui.date_picker
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.astashin.marvelcomics.Date
+import java.util.*
 import javax.inject.Inject
 
 class DatePickerViewModel @Inject constructor() : ViewModel() {
 
-    val startDate = MutableLiveData<Date>(Date(1960, 11, 19))
-    val endDate = MutableLiveData<Date>(Date(2019, 11, 19))
+    private val minDate = Date(1939, 9, 1)
+    private val maxDate: Date
+        get() {
+            val calendar = Calendar.getInstance()
+            return Date(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+        }
+
+    val startDate = MutableLiveData<Date>(minDate)
+    val endDate = MutableLiveData<Date>(maxDate)
 
     private var view: DatePickerView? = null
 
@@ -21,17 +33,18 @@ class DatePickerViewModel @Inject constructor() : ViewModel() {
     }
 
     fun startDateClick() {
-        view?.selectDate(startDate.value!!) {
+        view?.selectDate(startDate.value!!, minDate, endDate.value!!) {
             startDate.value = it
         }
     }
 
     fun endDateClick() {
-        view?.selectDate(endDate.value!!) {
+        view?.selectDate(endDate.value!!, startDate.value!!, maxDate) {
             endDate.value = it
         }
     }
 
     fun loadComicsClick() {
+        view?.openComicsList(startDate.value!!, endDate.value!!)
     }
 }

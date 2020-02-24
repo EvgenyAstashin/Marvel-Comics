@@ -13,12 +13,21 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API", "\"https://gateway.marvel.com\"")
+        buildConfigField("String", "API_KEY", "\"a5155bd55dd92ae7e2542fea469eb5eb\"")
+        buildConfigField("String", "API_PRIVATE_KEY", "\"f717133f9403dcbdf56cf42ce181b3744d920940\"")
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dataBinding {
@@ -28,6 +37,9 @@ android {
 
 dependencies {
     def dagger_version = "2.25.4"
+    def retrofit_version = "2.7.1"
+    def gson_version = "2.8.6"
+    def glide_version = "4.11.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -38,6 +50,11 @@ dependencies {
 
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation group: "com.squareup.retrofit2", name: "converter-gson", version: retrofit_version
+    implementation "com.google.code.gson:gson:$gson_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
