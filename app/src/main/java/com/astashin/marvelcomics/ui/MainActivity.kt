@@ -1,7 +1,8 @@
-package com.astashin.marvelcomics
+package com.astashin.marvelcomics.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.astashin.marvelcomics.R
 
 class MainActivity : AppCompatActivity() {
 

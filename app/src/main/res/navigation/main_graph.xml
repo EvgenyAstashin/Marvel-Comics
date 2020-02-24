@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/datePickerFragment"
-        android:name="com.astashin.marvelcomics.date_picker.DatePickerFragment"
+        android:name="com.astashin.marvelcomics.ui.date_picker.DatePickerFragment"
         android:label="fragment_date_picker"
         tools:layout="@layout/fragment_date_picker" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/comicsListFragment"
-        android:name="com.astashin.marvelcomics.comics.ComicsListFragment"
+        android:name="com.astashin.marvelcomics.ui.comics.ComicsListFragment"
         android:label="fragment_comics_list"
         tools:layout="@layout/fragment_comics_list" >
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/charactersListFragment"
-        android:name="com.astashin.marvelcomics.characters.CharactersListFragment"
+        android:name="com.astashin.marvelcomics.ui.characters.CharactersListFragment"
         android:label="fragment_characters_list"
         tools:layout="@layout/fragment_characters_list" />
 </navigation>

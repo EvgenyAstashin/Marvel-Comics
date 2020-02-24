@@ -1,4 +1,4 @@
-package com.astashin.marvelcomics.characters
+package com.astashin.marvelcomics.ui.comics
 
 
 import android.os.Bundle
@@ -9,12 +9,15 @@ import android.view.ViewGroup
 
 import com.astashin.marvelcomics.R
 
-class CharactersListFragment : Fragment() {
+class ComicsListFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_characters_list, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_comics_list, container, false)
     }
+
+
 }
