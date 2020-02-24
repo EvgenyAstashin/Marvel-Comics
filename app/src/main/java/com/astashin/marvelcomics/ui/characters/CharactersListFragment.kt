@@ -1,11 +1,13 @@
 package com.astashin.marvelcomics.ui.characters
 
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +20,7 @@ import com.astashin.marvelcomics.model.Character
 import com.astashin.marvelcomics.model.Comic
 import javax.inject.Inject
 
-class CharactersListFragment : Fragment() {
+class CharactersListFragment : Fragment(), CharacterListView {
 
     companion object {
 
@@ -56,8 +58,18 @@ class CharactersListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.attachView(this)
         setupToolbar()
         setupRecycler()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.detachView()
+    }
+
+    override fun showError(error: String?) {
+        Toast.makeText(context, error?: getString(R.string.network_error), Toast.LENGTH_SHORT).show()
     }
 
     private fun setupToolbar() {

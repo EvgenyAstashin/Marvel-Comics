@@ -22,6 +22,16 @@ class CharactersViewModel @Inject constructor(private val api: Api) : ViewModel(
     val loading = MutableLiveData<Boolean>(false)
     val charactersList = MutableListLiveData<Character>()
 
+    var view: CharacterListView? = null
+
+    fun attachView(view: CharacterListView) {
+        this.view = view
+    }
+
+    fun detachView() {
+        this.view = null
+    }
+
     fun setComic(comic: Comic?) {
         val needLoad = this.comic.value == null
         this.comic.value = comic
@@ -34,6 +44,7 @@ class CharactersViewModel @Inject constructor(private val api: Api) : ViewModel(
         api.loadCharacters(comic.value!!.id, PAGE_SIZE).enqueue(object : Callback<Response<Data<Character>>> {
             override fun onFailure(call: Call<Response<Data<Character>>>, t: Throwable) {
                 loading.value = false
+                view?.showError()
             }
 
             override fun onResponse(
@@ -44,7 +55,7 @@ class CharactersViewModel @Inject constructor(private val api: Api) : ViewModel(
                 if (r != null && r.code == 200) {
                     charactersList.addAll(r.body.results)
                 } else {
-
+                    view?.showError(r?.status)
                 }
                 loading.value = false
             }

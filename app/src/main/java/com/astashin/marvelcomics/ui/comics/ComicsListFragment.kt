@@ -1,9 +1,11 @@
 package com.astashin.marvelcomics.ui.comics
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,7 +22,7 @@ import com.astashin.marvelcomics.ui.characters.CharactersListFragment
 import javax.inject.Inject
 
 
-class ComicsListFragment : Fragment(), ComicsAdapter.OnComicClickListener {
+class ComicsListFragment : Fragment(), ComicsListView, ComicsAdapter.OnComicClickListener {
 
     companion object {
 
@@ -62,8 +64,14 @@ class ComicsListFragment : Fragment(), ComicsAdapter.OnComicClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.attachView(this)
         setupRecycler()
         setupToolbar()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.detachView()
     }
 
     override fun onComicClicked(comic: Comic) {
@@ -71,6 +79,10 @@ class ComicsListFragment : Fragment(), ComicsAdapter.OnComicClickListener {
             R.id.action_comicsListFragment_to_charactersListFragment,
             CharactersListFragment.buildArgs(comic)
         )
+    }
+
+    override fun showError(error: String?) {
+        Toast.makeText(context, error?: getString(R.string.network_error), Toast.LENGTH_SHORT).show()
     }
 
     private fun setupToolbar() {

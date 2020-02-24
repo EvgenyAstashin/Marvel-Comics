@@ -27,6 +27,16 @@ class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
     var loading = MutableLiveData<Boolean>(false)
     var title = MutableLiveData<String>()
 
+    var view: ComicsListView? = null
+
+    fun attachView(view: ComicsListView) {
+        this.view = view
+    }
+
+    fun detachView() {
+        this.view = null
+    }
+
     fun loadComics() {
         if (loading.value!! || comicsList.value!!.size == total) return
 
@@ -40,6 +50,7 @@ class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
             .enqueue(object : Callback<Response<Data<Comic>>> {
                 override fun onFailure(call: Call<Response<Data<Comic>>>, t: Throwable) {
                     loading.value = false
+                    view?.showError()
                 }
 
                 override fun onResponse(
@@ -52,7 +63,7 @@ class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
                         comicsList.addAll(r.body.results)
                         offset += r.body.results.size
                     } else {
-
+                        view?.showError()
                     }
                     loading.value = false
                 }
