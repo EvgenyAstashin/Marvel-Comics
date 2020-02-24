@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.astashin.marvelcomics.Date
@@ -15,10 +16,11 @@ import com.astashin.marvelcomics.R
 import com.astashin.marvelcomics.app
 import com.astashin.marvelcomics.databinding.FragmentComicsListBinding
 import com.astashin.marvelcomics.model.Comic
+import com.astashin.marvelcomics.ui.characters.CharactersListFragment
 import javax.inject.Inject
 
 
-class ComicsListFragment : Fragment() {
+class ComicsListFragment : Fragment(), ComicsAdapter.OnComicClickListener {
 
     companion object {
 
@@ -36,7 +38,6 @@ class ComicsListFragment : Fragment() {
 
     private lateinit var viewModel: ComicsViewModel
     private lateinit var binding: FragmentComicsListBinding
-    private lateinit var adapter: ComicsAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +66,13 @@ class ComicsListFragment : Fragment() {
         setupToolbar()
     }
 
+    override fun onComicClicked(comic: Comic) {
+        NavHostFragment.findNavController(this).navigate(
+            R.id.action_comicsListFragment_to_charactersListFragment,
+            CharactersListFragment.buildArgs(comic)
+        )
+    }
+
     private fun setupToolbar() {
         binding.toolbar.setNavigationIcon(R.drawable.ic_back_arrow)
         binding.toolbar.setNavigationOnClickListener{
@@ -73,7 +81,7 @@ class ComicsListFragment : Fragment() {
     }
 
     private fun setupRecycler() {
-        adapter = ComicsAdapter(viewModel.comicsList.value!!)
+        val adapter = ComicsAdapter(viewModel.comicsList.value!!, this)
         val layoutManager = LinearLayoutManager(context)
         binding.recycler.layoutManager = layoutManager
         binding.recycler.adapter = adapter

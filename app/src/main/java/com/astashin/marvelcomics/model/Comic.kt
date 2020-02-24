@@ -1,6 +1,7 @@
 package com.astashin.marvelcomics.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Comic(
    @SerializedName("id")
@@ -11,4 +12,4 @@ data class Comic(
    val description: String,
    @SerializedName("thumbnail")
    val thumbnail: Thumbnail
-)
+) : Serializable

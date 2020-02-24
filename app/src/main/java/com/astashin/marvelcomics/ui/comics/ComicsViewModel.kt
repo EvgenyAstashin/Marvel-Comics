@@ -48,7 +48,7 @@ class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
                 ) {
                     val r = response.body()
                     if (r != null && r.code == 200) {
-                        total
+                        total = r.body.total
                         comicsList.addAll(r.body.results)
                         offset += r.body.results.size
                     } else {

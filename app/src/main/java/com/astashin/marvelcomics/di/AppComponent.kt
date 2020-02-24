@@ -1,6 +1,7 @@
 package com.astashin.marvelcomics.di
 
 import android.content.Context
+import com.astashin.marvelcomics.ui.characters.CharactersListFragment
 import com.astashin.marvelcomics.ui.comics.ComicsListFragment
 import com.astashin.marvelcomics.ui.date_picker.DatePickerFragment
 import dagger.BindsInstance
@@ -19,4 +20,6 @@ interface AppComponent {
     fun inject(fragment: DatePickerFragment)
 
     fun inject(fragment: ComicsListFragment)
+
+    fun inject(fragment: CharactersListFragment)
 }
