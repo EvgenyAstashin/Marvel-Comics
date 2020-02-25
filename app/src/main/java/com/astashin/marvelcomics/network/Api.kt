@@ -11,8 +11,8 @@ import retrofit2.http.Query
 interface Api {
 
     @GET("v1/public/comics")
-    fun loadComics(@Query("dateRange") dateRange: String, @Query("offset") offset: Int, @Query("limit") limit: Int): Call<Response<Data<Comic>>>
+    fun loadComics(@Query("dateRange") dateRange: String, @Query("offset") offset: Int, @Query("limit") limit: Int): Call<ApiResponse<Data<Comic>>>
 
     @GET("v1/public/comics/{comicId}/characters")
-    fun loadCharacters(@Path("comicId") comicId: Int, @Query("limit") limit: Int): Call<Response<Data<Character>>>
+    fun loadCharacters(@Path("comicId") comicId: Int, @Query("limit") limit: Int): Call<ApiResponse<Data<Character>>>
 }

@@ -1,4 +1,4 @@
-package com.astashin.marvelcomics
+package com.astashin.marvelcomics.ui
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

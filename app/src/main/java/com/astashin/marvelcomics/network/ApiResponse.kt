@@ -2,7 +2,7 @@ package com.astashin.marvelcomics.network
 
 import com.google.gson.annotations.SerializedName
 
-class Response<T> (
+class ApiResponse<T> (
     @SerializedName("code")
     val code: Int,
     @SerializedName("data")

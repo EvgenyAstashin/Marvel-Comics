@@ -2,8 +2,8 @@ package com.astashin.marvelcomics.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.astashin.marvelcomics.ViewModelFactory
-import com.astashin.marvelcomics.ViewModelKey
+import com.astashin.marvelcomics.ui.ViewModelFactory
+import com.astashin.marvelcomics.ui.ViewModelKey
 import com.astashin.marvelcomics.ui.characters.CharactersViewModel
 import com.astashin.marvelcomics.ui.comics.ComicsViewModel
 import com.astashin.marvelcomics.ui.date_picker.DatePickerViewModel

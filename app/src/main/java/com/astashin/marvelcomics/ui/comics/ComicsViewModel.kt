@@ -1,41 +1,32 @@
 package com.astashin.marvelcomics.ui.comics
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.astashin.marvelcomics.Date
 import com.astashin.marvelcomics.MutableListLiveData
 import com.astashin.marvelcomics.model.Comic
 import com.astashin.marvelcomics.model.Data
 import com.astashin.marvelcomics.network.Api
-import com.astashin.marvelcomics.network.Response
+import com.astashin.marvelcomics.network.ApiResponse
+import com.astashin.marvelcomics.ui.base.BaseViewModel
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
-class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
+class ComicsViewModel @Inject constructor(private val api: Api) : BaseViewModel<ComicsListView>() {
 
     companion object {
         const val PAGE_SIZE = 20
     }
 
-    var startDate: Date? = null
-    var endDate: Date? = null
+    private var startDate: Date? = null
+    private var endDate: Date? = null
     private var offset = 0
     private var total = -1
 
     val comicsList = MutableListLiveData<Comic>()
     var loading = MutableLiveData<Boolean>(false)
     var title = MutableLiveData<String>()
-
-    var view: ComicsListView? = null
-
-    fun attachView(view: ComicsListView) {
-        this.view = view
-    }
-
-    fun detachView() {
-        this.view = null
-    }
 
     fun loadComics() {
         if (loading.value!! || comicsList.value!!.size == total) return
@@ -46,25 +37,17 @@ class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
             "${startDate?.toFormattedString()},${endDate?.toFormattedString()}",
             offset,
             PAGE_SIZE
-        )
-            .enqueue(object : Callback<Response<Data<Comic>>> {
-                override fun onFailure(call: Call<Response<Data<Comic>>>, t: Throwable) {
+        ).enqueue(object : Callback<ApiResponse<Data<Comic>>> {
+                override fun onFailure(call: Call<ApiResponse<Data<Comic>>>, t: Throwable) {
                     loading.value = false
-                    view?.showError()
+                    handleFailure()
                 }
 
                 override fun onResponse(
-                    call: Call<Response<Data<Comic>>>,
-                    response: retrofit2.Response<Response<Data<Comic>>>
+                    call: Call<ApiResponse<Data<Comic>>>,
+                    response: Response<ApiResponse<Data<Comic>>>
                 ) {
-                    val r = response.body()
-                    if (r != null && r.code == 200) {
-                        total = r.body.total
-                        comicsList.addAll(r.body.results)
-                        offset += r.body.results.size
-                    } else {
-                        view?.showError()
-                    }
+                    handleResponse(response)
                     loading.value = false
                 }
             })
@@ -77,5 +60,20 @@ class ComicsViewModel @Inject constructor(private val api: Api) : ViewModel() {
         title.value = "$startDate - $endDate"
         if (needLoad)
             loadComics()
+    }
+
+    private fun handleFailure() {
+        view?.showError()
+    }
+
+    private fun handleResponse(response: Response<ApiResponse<Data<Comic>>>) {
+        val apiResponse = response.body()
+        if (apiResponse != null && apiResponse.code == 200) {
+            total = apiResponse.body.total
+            comicsList.addAll(apiResponse.body.results)
+            offset += apiResponse.body.results.size
+        } else {
+            view?.showError()
+        }
     }
 }

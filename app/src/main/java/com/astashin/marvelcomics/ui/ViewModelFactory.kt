@@ -1,4 +1,4 @@
-package com.astashin.marvelcomics
+package com.astashin.marvelcomics.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +8,7 @@ import javax.inject.Provider
 import javax.inject.Singleton
 import kotlin.reflect.KClass
 
+@Suppress("UNCHECKED_CAST")
 @Singleton
 class ViewModelFactory @Inject constructor(private val viewModels: MutableMap<Class<out ViewModel>, Provider<ViewModel>>) :
     ViewModelProvider.Factory {

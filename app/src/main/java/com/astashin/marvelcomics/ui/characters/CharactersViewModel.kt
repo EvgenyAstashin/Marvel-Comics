@@ -1,18 +1,20 @@
 package com.astashin.marvelcomics.ui.characters
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.astashin.marvelcomics.MutableListLiveData
 import com.astashin.marvelcomics.model.Character
 import com.astashin.marvelcomics.model.Comic
 import com.astashin.marvelcomics.model.Data
 import com.astashin.marvelcomics.network.Api
-import com.astashin.marvelcomics.network.Response
+import com.astashin.marvelcomics.network.ApiResponse
+import com.astashin.marvelcomics.ui.base.BaseViewModel
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
-class CharactersViewModel @Inject constructor(private val api: Api) : ViewModel() {
+class CharactersViewModel @Inject constructor(private val api: Api) :
+    BaseViewModel<CharacterListView>() {
 
     companion object {
         private const val PAGE_SIZE = 100
@@ -22,44 +24,42 @@ class CharactersViewModel @Inject constructor(private val api: Api) : ViewModel(
     val loading = MutableLiveData<Boolean>(false)
     val charactersList = MutableListLiveData<Character>()
 
-    var view: CharacterListView? = null
-
-    fun attachView(view: CharacterListView) {
-        this.view = view
-    }
-
-    fun detachView() {
-        this.view = null
-    }
-
     fun setComic(comic: Comic?) {
         val needLoad = this.comic.value == null
         this.comic.value = comic
-        if(needLoad)
+        if (needLoad)
             loadCharacters()
     }
 
     private fun loadCharacters() {
         loading.value = true
-        api.loadCharacters(comic.value!!.id, PAGE_SIZE).enqueue(object : Callback<Response<Data<Character>>> {
-            override fun onFailure(call: Call<Response<Data<Character>>>, t: Throwable) {
-                loading.value = false
-                view?.showError()
-            }
-
-            override fun onResponse(
-                call: Call<Response<Data<Character>>>,
-                response: retrofit2.Response<Response<Data<Character>>>
-            ) {
-                val r = response.body()
-                if (r != null && r.code == 200) {
-                    charactersList.addAll(r.body.results)
-                } else {
-                    view?.showError(r?.status)
+        api.loadCharacters(comic.value!!.id, PAGE_SIZE)
+            .enqueue(object : Callback<ApiResponse<Data<Character>>> {
+                override fun onFailure(call: Call<ApiResponse<Data<Character>>>, t: Throwable) {
+                    loading.value = false
+                    handleFailure()
                 }
-                loading.value = false
-            }
 
-        })
+                override fun onResponse(
+                    call: Call<ApiResponse<Data<Character>>>,
+                    response: Response<ApiResponse<Data<Character>>>
+                ) {
+                    handleResponse(response)
+                    loading.value = false
+                }
+            })
+    }
+
+    private fun handleFailure() {
+        view?.showError()
+    }
+
+    private fun handleResponse(response: Response<ApiResponse<Data<Character>>>) {
+        val apiResponse = response.body()
+        if (apiResponse != null && apiResponse.code == 200) {
+            charactersList.addAll(apiResponse.body.results)
+        } else {
+            view?.showError(apiResponse?.status)
+        }
     }
 }

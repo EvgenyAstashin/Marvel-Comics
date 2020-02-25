@@ -1,7 +1,5 @@
 package com.astashin.marvelcomics.ui.characters
 
-
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
