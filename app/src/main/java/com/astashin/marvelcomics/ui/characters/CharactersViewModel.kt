@@ -1,7 +1,7 @@
 package com.astashin.marvelcomics.ui.characters
 
 import androidx.lifecycle.MutableLiveData
-import com.astashin.marvelcomics.MutableListLiveData
+import com.astashin.marvelcomics.utils.livedata.MutableListLiveData
 import com.astashin.marvelcomics.model.Character
 import com.astashin.marvelcomics.model.Comic
 import com.astashin.marvelcomics.model.Data
@@ -11,17 +11,16 @@ import com.astashin.marvelcomics.ui.base.BaseViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-class CharactersViewModel @Inject constructor(private val api: Api) :
-    BaseViewModel<CharacterListView>() {
+class CharactersViewModel : BaseViewModel<CharacterListView>() {
 
     companion object {
         private const val PAGE_SIZE = 100
     }
 
+    lateinit var api: Api
     val comic = MutableLiveData<Comic>()
-    val loading = MutableLiveData<Boolean>(false)
+    val loading = MutableLiveData(false)
     val charactersList = MutableListLiveData<Character>()
 
     fun setComic(comic: Comic?) {

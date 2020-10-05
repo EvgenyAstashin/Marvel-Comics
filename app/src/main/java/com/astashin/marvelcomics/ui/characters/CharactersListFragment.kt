@@ -8,16 +8,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.astashin.marvelcomics.R
-import com.astashin.marvelcomics.app
 import com.astashin.marvelcomics.databinding.FragmentCharactersListBinding
 import com.astashin.marvelcomics.model.Character
 import com.astashin.marvelcomics.model.Comic
+import com.astashin.marvelcomics.network.Api
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CharactersListFragment : Fragment(), CharacterListView {
 
     companion object {
@@ -30,15 +32,15 @@ class CharactersListFragment : Fragment(), CharacterListView {
     }
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var api: Api
 
     private lateinit var viewModel: CharactersViewModel
     private lateinit var binding: FragmentCharactersListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        app().appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)[CharactersViewModel::class.java]
+        viewModel = ViewModelProviders.of(this).get(CharactersViewModel::class.java)
+        viewModel.api = api
         val comic = arguments?.getSerializable(COMIC) as Comic?
         viewModel.setComic(comic)
     }
@@ -81,7 +83,7 @@ class CharactersListFragment : Fragment(), CharacterListView {
         val adapter = CharactersAdapter(viewModel.charactersList.value!!)
         binding.recycler.layoutManager = LinearLayoutManager(context)
         binding.recycler.adapter = adapter
-        viewModel.charactersList.observe(this, Observer<List<Character>> {
+        viewModel.charactersList.observe(viewLifecycleOwner, {
             adapter.notifyDataSetChanged()
         })
     }

@@ -1,6 +1,5 @@
 package com.astashin.marvelcomics.ui.comics
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,20 +7,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.astashin.marvelcomics.Date
 import com.astashin.marvelcomics.R
-import com.astashin.marvelcomics.app
 import com.astashin.marvelcomics.databinding.FragmentComicsListBinding
 import com.astashin.marvelcomics.model.Comic
+import com.astashin.marvelcomics.network.Api
 import com.astashin.marvelcomics.ui.characters.CharactersListFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class ComicsListFragment : Fragment(), ComicsListView, ComicsAdapter.OnComicClickListener {
 
     companion object {
@@ -36,16 +35,15 @@ class ComicsListFragment : Fragment(), ComicsListView, ComicsAdapter.OnComicClic
     }
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var api: Api
 
     private lateinit var viewModel: ComicsViewModel
     private lateinit var binding: FragmentComicsListBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        app().appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)[ComicsViewModel::class.java]
+        viewModel = ViewModelProviders.of(this).get(ComicsViewModel::class.java)
+        viewModel.api = api
         val startDate = arguments?.getSerializable(START_DATE) as Date?
         val endDate = arguments?.getSerializable(END_DATE) as Date?
         viewModel.setStartAndEndDates(startDate, endDate)
@@ -97,7 +95,7 @@ class ComicsListFragment : Fragment(), ComicsListView, ComicsAdapter.OnComicClic
         val layoutManager = LinearLayoutManager(context)
         binding.recycler.layoutManager = layoutManager
         binding.recycler.adapter = adapter
-        viewModel.comicsList.observe(this, Observer<List<Comic>> {
+        viewModel.comicsList.observe(viewLifecycleOwner, {
             adapter.notifyDataSetChanged()
         })
         binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {

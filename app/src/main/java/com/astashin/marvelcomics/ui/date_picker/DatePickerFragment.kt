@@ -7,26 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import com.astashin.marvelcomics.Date
 import com.astashin.marvelcomics.R
-import com.astashin.marvelcomics.app
 import com.astashin.marvelcomics.databinding.FragmentDatePickerBinding
 import com.astashin.marvelcomics.ui.comics.ComicsListFragment
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DatePickerFragment : Fragment(), DatePickerView {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: DatePickerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        app().appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)[DatePickerViewModel::class.java]
+        viewModel = ViewModelProviders.of(this).get(DatePickerViewModel::class.java)
     }
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package com.astashin.marvelcomics
+package com.astashin.marvelcomics.utils.livedata
 
 import androidx.lifecycle.LiveData
 

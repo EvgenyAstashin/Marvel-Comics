@@ -5,16 +5,17 @@ import com.astashin.marvelcomics.network.Api
 import com.astashin.marvelcomics.utils.md5
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
-class AppModule {
+@InstallIn(ActivityComponent::class)
+object AppModule {
 
     @Provides
-    @Singleton
     fun provideApi(): Api {
         val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
             val original = chain.request()

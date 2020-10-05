@@ -2,7 +2,7 @@ package com.astashin.marvelcomics.ui.comics
 
 import androidx.lifecycle.MutableLiveData
 import com.astashin.marvelcomics.Date
-import com.astashin.marvelcomics.MutableListLiveData
+import com.astashin.marvelcomics.utils.livedata.MutableListLiveData
 import com.astashin.marvelcomics.model.Comic
 import com.astashin.marvelcomics.model.Data
 import com.astashin.marvelcomics.network.Api
@@ -11,14 +11,14 @@ import com.astashin.marvelcomics.ui.base.BaseViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-class ComicsViewModel @Inject constructor(private val api: Api) : BaseViewModel<ComicsListView>() {
+class ComicsViewModel : BaseViewModel<ComicsListView>() {
 
     companion object {
         const val PAGE_SIZE = 20
     }
 
+    lateinit var api: Api
     private var startDate: Date? = null
     private var endDate: Date? = null
     private var offset = 0

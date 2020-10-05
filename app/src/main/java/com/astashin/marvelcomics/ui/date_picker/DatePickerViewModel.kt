@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.astashin.marvelcomics.Date
 import com.astashin.marvelcomics.ui.base.BaseViewModel
 import java.util.*
-import javax.inject.Inject
 
-class DatePickerViewModel @Inject constructor() : BaseViewModel<DatePickerView>() {
+class DatePickerViewModel : BaseViewModel<DatePickerView>() {
 
     private val minDate = Date(1939, 9, 1)
     private val maxDate: Date
@@ -19,8 +18,8 @@ class DatePickerViewModel @Inject constructor() : BaseViewModel<DatePickerView>(
             )
         }
 
-    val startDate = MutableLiveData<Date>(minDate)
-    val endDate = MutableLiveData<Date>(maxDate)
+    val startDate = MutableLiveData(minDate)
+    val endDate = MutableLiveData(maxDate)
 
     fun startDateClick() {
         view?.selectDate(startDate.value!!, minDate, endDate.value!!) {
