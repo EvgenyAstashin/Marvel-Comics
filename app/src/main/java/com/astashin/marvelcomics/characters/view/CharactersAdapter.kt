@@ -1,4 +1,4 @@
-package com.astashin.marvelcomics.ui.characters
+package com.astashin.marvelcomics.characters.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/charactersListFragment"
-        android:name="com.astashin.marvelcomics.ui.characters.CharactersListFragment"
+        android:name="com.astashin.marvelcomics.characters.view.CharactersListFragment"
         android:label="fragment_characters_list"
         tools:layout="@layout/fragment_characters_list" />
 </navigation>

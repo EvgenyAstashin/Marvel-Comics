@@ -4,6 +4,6 @@ import androidx.lifecycle.ViewModel
 
 interface IViewModel
 
-class BaseViewModel : ViewModel(), IViewModel {
+open class BaseViewModel : ViewModel(), IViewModel {
 
 }

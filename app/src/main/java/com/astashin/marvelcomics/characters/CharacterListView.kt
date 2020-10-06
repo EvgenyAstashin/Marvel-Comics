@@ -1,4 +1,4 @@
-package com.astashin.marvelcomics.ui.characters
+package com.astashin.marvelcomics.characters
 
 import com.astashin.marvelcomics.ui.base.BaseView
 

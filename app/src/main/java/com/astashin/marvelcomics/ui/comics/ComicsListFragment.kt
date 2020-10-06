@@ -16,7 +16,7 @@ import com.astashin.marvelcomics.R
 import com.astashin.marvelcomics.databinding.FragmentComicsListBinding
 import com.astashin.marvelcomics.model.Comic
 import com.astashin.marvelcomics.network.Api
-import com.astashin.marvelcomics.ui.characters.CharactersListFragment
+import com.astashin.marvelcomics.characters.view.CharactersListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

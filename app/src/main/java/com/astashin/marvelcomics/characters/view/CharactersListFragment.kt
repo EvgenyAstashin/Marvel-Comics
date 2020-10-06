@@ -1,26 +1,22 @@
-package com.astashin.marvelcomics.ui.characters
+package com.astashin.marvelcomics.characters.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.astashin.marvelcomics.R
+import com.astashin.marvelcomics.characters.viewmodel.ICharactersViewModel
+import com.astashin.marvelcomics.core.view.BaseFragment
 import com.astashin.marvelcomics.databinding.FragmentCharactersListBinding
-import com.astashin.marvelcomics.model.Character
 import com.astashin.marvelcomics.model.Comic
-import com.astashin.marvelcomics.network.Api
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class CharactersListFragment : Fragment(), CharacterListView {
+class CharactersListFragment : BaseFragment<ICharactersViewModel>() {
 
     companion object {
 
@@ -31,16 +27,10 @@ class CharactersListFragment : Fragment(), CharacterListView {
         }
     }
 
-    @Inject
-    lateinit var api: Api
-
-    private lateinit var viewModel: CharactersViewModel
     private lateinit var binding: FragmentCharactersListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CharactersViewModel::class.java)
-        viewModel.api = api
         val comic = arguments?.getSerializable(COMIC) as Comic?
         viewModel.setComic(comic)
     }
@@ -58,17 +48,15 @@ class CharactersListFragment : Fragment(), CharacterListView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.attachView(this)
         setupToolbar()
         setupRecycler()
+
+        viewModel.errorEvent.observe(viewLifecycleOwner, {
+            showError(it)
+        })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.detachView()
-    }
-
-    override fun showError(error: String?) {
+    private fun showError(error: String?) {
         Toast.makeText(context, error?: getString(R.string.network_error), Toast.LENGTH_SHORT).show()
     }
 

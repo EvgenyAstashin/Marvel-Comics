@@ -1,4 +1,11 @@
 package com.astashin.marvelcomics.core.view
 
-class BaseFragment {
+import androidx.fragment.app.Fragment
+import com.astashin.marvelcomics.core.viewmodel.IViewModel
+import javax.inject.Inject
+
+open class BaseFragment<VM : IViewModel> : Fragment() {
+
+    @Inject
+    lateinit var viewModel: VM
 }
